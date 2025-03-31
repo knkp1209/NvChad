@@ -19,7 +19,9 @@ return {
       ensure_installed = {
         "vim", "lua", "vimdoc",
         "go", "gomod", "gosum", "gowork",
-        "html", "css"
+        "html", "css",
+        "php", "phpdoc", "php_only",
+        "python",
       },
     },
   },

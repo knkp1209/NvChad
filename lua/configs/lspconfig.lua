@@ -2,9 +2,10 @@
 require("nvchad.configs.lspconfig").defaults()
 
 local lspconfig = require "lspconfig"
+local configs = require "lspconfig/configs"
 
 -- EXAMPLE
-local servers = { "html", "cssls", "gopls", "golangci_lint_ls" }
+local servers = { "html", "cssls", "gopls", "golangci_lint_ls", "intelephense", "phpactor", "pyright" }
 local nvlsp = require "nvchad.configs.lspconfig"
 local map = vim.keymap.set
 
@@ -22,7 +23,7 @@ local ooo = function(client, bufnr)
   map("n", "gi", "<cmd>lua require('telescope.builtin').lsp_implementations()<CR>",
     { desc = "LSP implementation", buffer = bufnr })
   map("n", "<leader>ls", "<cmd>lua vim.lsp.buf.signature_help()<CR>", { desc = "LSP signature help", buffer = bufnr })
-  map("n", "<leader><leader>", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>",
+  map("n", "<leader>gs", "<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>",
     { desc = "LSP document symbols", buffer = bufnr })
 
 
@@ -37,6 +38,9 @@ local ooo = function(client, bufnr)
   -- map("n", "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", { desc = "Remove workspace folder",   buffer = bufnr  })
   -- map("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", { desc = "List workspace folders",   buffer = bufnr  })
 end
+
+
+lspconfig.golangci_lint_ls.setup { filetypes = { 'go', 'gomod' } }
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do
@@ -53,3 +57,16 @@ end
 --   on_init = nvlsp.on_init,
 --   capabilities = nvlsp.capabilities,
 -- }
+--
+
+if not configs.golangcilsp then
+  configs.golangcilsp = {
+    default_config = {
+      cmd = { 'golangci-lint-langserver' },
+      root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+      init_options = {
+        command = { "golangci-lint", "run", "--out-format", "json" },
+      }
+    },
+  }
+end

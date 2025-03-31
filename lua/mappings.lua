@@ -29,8 +29,18 @@ map("n", "<leader>fs", "<cmd>lua require('telescope.builtin').grep_string()<CR>"
 map("n", "<Esc>CI", "<C-i>", { desc = "Separate <C-i> and Tab in iTerm", silent = true })
 
 -- Telescope mappings
-map("n", "<leader>ti", "<cmd>lua require('telescope.builtin').diagnostics()<CR>",
-  { desc = "diagnostics", silent = true })
+-- map("n", "<leader>ti", "<cmd>lua require('telescope.builtin').diagnostics()<CR>",
+--   { desc = "diagnostics", silent = true })
 
 -- Toggle NvimTree
 map({ "n", "v" }, "<leader>e", "<cmd> NvimTreeToggle <CR>", { desc = "Separate <C-i> and Tab in iTerm", silent = true })
+
+-- quit nvim
+map({ "n", "v" }, "<leader>qa", "<cmd> quita<CR>", { desc = "quit nvim", nowait = true })
+
+-- copilot
+map({ "n", "v", }, "<leader>ccp",
+  function()
+    local actions = require("CopilotChat.actions")
+    require("CopilotChat.integrations.telescope").pick(actions.prompt_actions())
+  end, { desc = "CopilotChat - Prompt actions " })
