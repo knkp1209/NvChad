@@ -21,7 +21,7 @@ return {
         "go", "gomod", "gosum", "gowork",
         "html", "css",
         "php", "phpdoc", "php_only",
-        "python",
+        "python", "vue", "typescript", "javascript",
       },
     },
   },

@@ -5,7 +5,9 @@ local lspconfig = require "lspconfig"
 local configs = require "lspconfig/configs"
 
 -- EXAMPLE
-local servers = { "html", "cssls", "gopls", "golangci_lint_ls", "intelephense", "phpactor", "pyright" }
+local servers = { "html", "cssls", "gopls", "golangci_lint_ls",
+  "intelephense", "phpactor", "pyright", "volar"
+}
 local nvlsp = require "nvchad.configs.lspconfig"
 local map = vim.keymap.set
 
@@ -39,6 +41,33 @@ local ooo = function(client, bufnr)
   -- map("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", { desc = "List workspace folders",   buffer = bufnr  })
 end
 
+
+local mason_registry = require("mason-registry")
+local vue_language_server = mason_registry.get_package("vue-language-server"):get_install_path()
+    .. "/node_modules/@vue/language-server"
+
+lspconfig.ts_ls.setup {
+  on_attach = ooo,
+  on_init = nvlsp.on_init,
+  capabilities = nvlsp.capabilities,
+  init_options = {
+    plugins = {
+      {
+        name = "@vue/typescript-plugin",
+        location = vue_language_server,
+        languages = { "vue" },
+      }
+    }
+  },
+  filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" }
+}
+
+-- lspconfig.volar.setup {
+--   on_attach = ooo,
+--   on_init = nvlsp.on_init,
+--   capabilities = nvlsp.capabilities,
+--   filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+-- }
 
 lspconfig.golangci_lint_ls.setup { filetypes = { 'go', 'gomod' } }
 
